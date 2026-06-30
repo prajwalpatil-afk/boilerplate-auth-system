@@ -1,3 +1,6 @@
 spring:
   application:
     name: com.auth-system
+
+server:
+  port: 8082
