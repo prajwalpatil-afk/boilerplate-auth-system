@@ -20,5 +20,5 @@ public interface UserService {
 
 
     //get all users
-
+    Iterable<UserDto> getAllUsers();
 }
