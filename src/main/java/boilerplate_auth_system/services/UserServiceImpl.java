@@ -3,7 +3,9 @@ package boilerplate_auth_system.services;
 import boilerplate_auth_system.dtos.UserDto;
 import boilerplate_auth_system.entities.Provider;
 import boilerplate_auth_system.entities.User;
+import boilerplate_auth_system.exceptions.ResourceNotFoundException;
 import boilerplate_auth_system.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public UserDto createUser(UserDto userDto) {
         if(userDto.getEmail()==null || userDto.getEmail().isBlank()){
             throw new IllegalArgumentException("Email is required");
@@ -40,7 +43,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByEmail(String email) {
-        return null;
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(()-> new ResourceNotFoundException("User not found with given email id"));
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override
@@ -50,6 +56,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(String userId) {
+        return null;
+    }
+
+    @Override
+    public UserDto getUser() {
         return null;
     }
 }
