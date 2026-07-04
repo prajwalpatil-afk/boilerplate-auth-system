@@ -1,10 +1,11 @@
-package boilerplate_auth_system.services;
+package boilerplate_auth_system.services.impl;
 
 import boilerplate_auth_system.dtos.UserDto;
 import boilerplate_auth_system.entities.Provider;
 import boilerplate_auth_system.entities.User;
 import boilerplate_auth_system.exceptions.ResourceNotFoundException;
 import boilerplate_auth_system.repositories.UserRepository;
+import boilerplate_auth_system.services.UserService;
 import boilerplate_auth_system.utility.UserUtility;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
