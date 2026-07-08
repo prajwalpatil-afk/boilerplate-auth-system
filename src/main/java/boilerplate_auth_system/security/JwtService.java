@@ -4,7 +4,6 @@ import boilerplate_auth_system.entities.Role;
 import boilerplate_auth_system.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -87,15 +86,7 @@ public class JwtService {
 
     // Parse JWT
     public Jws<Claims> parse(String token) {
-
-        try {
-            return Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(token);
-        } catch (JwtException e) {
-            throw e;
-        }
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
     }
 
     // Check Access Token
@@ -123,5 +114,15 @@ public class JwtService {
     public String getJti(String token) {
 
         return parse(token).getPayload().getId();
+    }
+
+    public List<String> getRoles(String token) {
+        Claims claims = parse(token).getPayload();
+        return claims.get("roles", List.class);
+    }
+
+    public String getEmail(String token) {
+        Claims claims = parse(token).getPayload();
+        return claims.get("email", String.class);
     }
 }
