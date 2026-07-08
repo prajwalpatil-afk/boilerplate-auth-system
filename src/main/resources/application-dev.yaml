@@ -1,10 +1,4 @@
 spring:
-  application:
-    name: com.auth-system
-
-  profiles:
-    active: dev
-
   datasource:
     url: jdbc:postgresql://localhost:5432/auth-app
     username: postgres
@@ -38,7 +32,7 @@ logging:
 
 security:
   jwt:
-    secret: ${JWT_SECRET:Xze8lys0o65TgbA73VaeCzXtk4C970JfgOqHVwJKlaZ}
+    secret: ${JWT_SECRET:Xze8lys0o65TgbA73VaeCzXtk4C970JfgOqHVwJKlaZ7mN4QpR2sY8uV1xAbCdEfGh}
     issuer: ${JWT_ISSUER:api.auth-system}
     access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS:3600}
     refresh-ttl-seconds: ${JWT_REFRESH_TTL_SECONDS:86400}
