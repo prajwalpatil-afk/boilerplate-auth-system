@@ -70,7 +70,7 @@ public class AuthController {
         String refreshToken = jwtService.generateRefreshToken(user, refreshTokenObj.getJti());
 
         //use cookie service to attach refresh token in cookie
-        cookieService.attachRefreshCookie(response, refreshToken, (int)jwtService.getAccessTtlSeconds());
+        cookieService.attachRefreshCookie(response, refreshToken, (int)jwtService.getRefreshTtlSeconds());
         cookieService.addNoStoreHeaders(response);
 
         TokenResponse tokenResponse = TokenResponse.of(accessToken, refreshToken, jwtService.getAccessTtlSeconds(), modelMapper.map(user, UserDto.class));
