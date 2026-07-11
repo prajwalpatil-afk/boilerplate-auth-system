@@ -56,12 +56,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                         .email(email)
                         .name(name)
                         .image(picture)
+                        .enable(true)
                         .provider(Provider.GOOGLE)
                         .build();
                 userRepository.findByEmail(email).ifPresentOrElse(user1 -> {
                     logger.info("user is there in database");
                     logger.info(user1.toString());
                 }, () -> {
+                    //specify default role
                     userRepository.save(user);
                 });
             }
