@@ -34,6 +34,7 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Provider provider = Provider.LOCAL;
+    private String providerId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -65,7 +66,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return email != null ? email : provider + ":" + providerId;
     }
 
     @Override

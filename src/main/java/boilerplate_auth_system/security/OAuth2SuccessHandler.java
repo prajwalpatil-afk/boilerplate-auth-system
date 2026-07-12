@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -52,20 +53,32 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 String email = oAuth2User.getAttributes().getOrDefault("email", "").toString();
                 String name = oAuth2User.getAttributes().getOrDefault("name", "").toString();
                 String picture = oAuth2User.getAttributes().getOrDefault("picture", "").toString();
-                user = User.builder()
+                User newUser = User.builder()
                         .email(email)
                         .name(name)
                         .image(picture)
                         .enable(true)
                         .provider(Provider.GOOGLE)
+                        .providerId(googleId)
                         .build();
-                userRepository.findByEmail(email).ifPresentOrElse(user1 -> {
-                    logger.info("user is there in database");
-                    logger.info(user1.toString());
-                }, () -> {
-                    //specify default role
-                    userRepository.save(user);
-                });
+                user = userRepository.findByEmail(email).orElseGet(()-> userRepository.save(newUser));
+            }
+            case "github" -> {
+                String githubId = Objects.toString(oAuth2User.getAttribute("id"), "");
+                String username = Objects.toString(oAuth2User.getAttribute("login"), "");
+                String email = (String) oAuth2User.getAttribute("email");
+                String image = Objects.toString(oAuth2User.getAttribute("avatar_url"), "");
+                User newUser = User.builder()
+                        .provider(Provider.GITHUB)
+                        .providerId(githubId)
+                        .name(username)
+                        .email(email)
+                        .image(image)
+                        .enable(true)
+                        .build();
+                user = userRepository
+                        .findByProviderAndProviderId(Provider.GITHUB, githubId)
+                        .orElseGet(() -> userRepository.save(newUser));
             }
             default -> {
                 throw new RuntimeException("Invalid registration id");
